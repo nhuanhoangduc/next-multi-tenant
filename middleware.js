@@ -39,15 +39,13 @@ export default async function middleware(req) {
   }
 
   // get org slug
-  let orgSlug;
-  // from subdomain
-  if (hostname.includes(process.env.NEXT_PUBLIC_ROOT_DOMAIN)) {
-    orgSlug = hostname.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "");
-  }
-  // from custom domain
-  else {
-    orgSlug = orgSlugMap[hostname];
-  }
+  const orgSlug = hostname.includes(process.env.NEXT_PUBLIC_ROOT_DOMAIN)
+    ? // from subdomain
+      hostname.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
+    : // from custom domain
+      orgSlugMap[hostname];
+
+  // should redirect to not found if org slug is undefined
 
   // rewrite everything else to `/[domain]/[slug] dynamic route
   return NextResponse.rewrite(
