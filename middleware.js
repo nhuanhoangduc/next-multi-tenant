@@ -49,8 +49,6 @@ export default async function middleware(req) {
     orgSlug = orgSlugMap[hostname];
   }
 
-  console.log(`/${hostname}/${orgSlug}${path}`);
-
   // rewrite everything else to `/[domain]/[slug] dynamic route
   return NextResponse.rewrite(
     new URL(`/${hostname}/${orgSlug}${path}`, req.url)
