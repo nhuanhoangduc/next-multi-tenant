@@ -13,6 +13,10 @@ export const config = {
   ],
 };
 
+const orgSlugMap = {
+  "ms.local:8080": "org1",
+};
+
 export default async function middleware(req) {
   const url = req.nextUrl;
 
@@ -34,6 +38,21 @@ export default async function middleware(req) {
     );
   }
 
+  // get org slug
+  let orgSlug;
+  // from subdomain
+  if (hostname.includes(process.env.NEXT_PUBLIC_ROOT_DOMAIN)) {
+    orgSlug = hostname.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "");
+  }
+  // from custom domain
+  else {
+    orgSlug = orgSlugMap[hostname];
+  }
+
+  console.log(`/${hostname}/${orgSlug}${path}`);
+
   // rewrite everything else to `/[domain]/[slug] dynamic route
-  return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
+  return NextResponse.rewrite(
+    new URL(`/${hostname}/${orgSlug}${path}`, req.url)
+  );
 }
