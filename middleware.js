@@ -27,8 +27,6 @@ export default async function middleware(req) {
     searchParams.length > 0 ? `?${searchParams}` : ""
   }`;
 
-  console.log(hostname, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
-
   // rewrite root application to `/home` folder
   if (hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(
